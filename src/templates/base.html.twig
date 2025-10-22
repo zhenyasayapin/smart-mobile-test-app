@@ -12,6 +12,12 @@
         {% endblock %}
     </head>
     <body>
+        <div>
+            <nav>
+                <a href="{{ path('app_author_index') }}">Authors</a>
+                <a href="{{ path('app_book_index') }}">Books</a>
+            </nav>
+        </div>
         {% block body %}{% endblock %}
     </body>
 </html>
