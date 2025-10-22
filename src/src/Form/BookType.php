@@ -27,6 +27,7 @@ class BookType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Book::class,
+            'csrf_protection' => false,
         ]);
     }
 }

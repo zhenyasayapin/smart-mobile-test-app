@@ -3,7 +3,9 @@
 namespace App\Controller\Api;
 
 use App\Entity\Book;
+use App\Form\BookType;
 use App\Repository\BookRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,12 +24,41 @@ final class BookController extends AbstractController
             100
         );
 
-        return $this->json($pagination->getItems(), context: ['groups' => ['api:read']]);
+        return $this->json($pagination->getItems());
     }
 
     #[Route('/by-id/{id}', name: 'api_book_by_id', methods: ['GET'])]
     public function getById(Book $book): Response
     {
-        return $this->json($book, context: ['groups' => ['api:read']]);
+        return $this->json($book);
+    }
+
+    #[Route('/update/{id}', name: 'api_book_update', methods: ['POST'])]
+    public function update(Book $book, Request $request, EntityManagerInterface $em): Response
+    {
+        $form = $this->createForm(BookType::class);
+        $form->submit(json_decode($request->getContent(), true));
+
+        if (!$form->isValid()) {
+            return $this->json(['errors' => $form->getErrors()]);
+        }
+
+        /** @var Book $newBook */
+        $this->updateBook($book, $form->getData());
+
+        $em->flush();
+
+        return $this->json($book);
+    }
+
+    private function updateBook(Book $book, Book $newBook)
+    {
+        if ($newBook->getTitle()) {
+            $book->setTitle($newBook->getTitle());
+        }
+
+        if ($newBook->getDescription()) {
+            $book->setDescription($newBook->getDescription());
+        }
     }
 }
