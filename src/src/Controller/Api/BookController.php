@@ -28,14 +28,22 @@ final class BookController extends AbstractController
     }
 
     #[Route('/by-id/{id}', name: 'api_book_by_id', methods: ['GET'])]
-    public function getById(Book $book): Response
+    public function getById(?Book $book): Response
     {
+        if (null === $book) {
+            return $this->json(['error' => 'Book not found']);
+        }
+
         return $this->json($book);
     }
 
     #[Route('/update/{id}', name: 'api_book_update', methods: ['POST'])]
-    public function update(Book $book, Request $request, EntityManagerInterface $em): Response
+    public function update(?Book $book, Request $request, EntityManagerInterface $em): Response
     {
+        if (null === $book) {
+            return $this->json(['error' => 'Book not found']);
+        }
+
         $form = $this->createForm(BookType::class);
         $form->submit(json_decode($request->getContent(), true));
 
@@ -52,8 +60,12 @@ final class BookController extends AbstractController
     }
 
     #[Route('/id/{id}', name: 'api_book_delete', methods: ['DELETE'])]
-    public function deleteById(Book $book, EntityManagerInterface $em): Response
+    public function deleteById(?Book $book, EntityManagerInterface $em): Response
     {
+        if (null === $book) {
+            return $this->json(['error' => 'Book not found']);
+        }
+
         $em->remove($book);
         $em->flush();
 
