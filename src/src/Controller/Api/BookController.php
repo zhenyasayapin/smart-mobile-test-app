@@ -2,6 +2,7 @@
 
 namespace App\Controller\Api;
 
+use App\Entity\Book;
 use App\Repository\BookRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -22,5 +23,11 @@ final class BookController extends AbstractController
         );
 
         return $this->json($pagination->getItems(), context: ['groups' => ['api:read']]);
+    }
+
+    #[Route('/by-id/{id}', name: 'api_book_by_id', methods: ['GET'])]
+    public function getById(Book $book): Response
+    {
+        return $this->json($book, context: ['groups' => ['api:read']]);
     }
 }
