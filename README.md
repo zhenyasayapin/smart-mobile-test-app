@@ -1,0 +1,1 @@
+# smart-mobile-test-app
