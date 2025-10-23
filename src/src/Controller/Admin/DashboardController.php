@@ -21,7 +21,7 @@ class DashboardController extends AbstractDashboardController
         $routeBuilder = $this->container->get(AdminUrlGenerator::class);
 
         // Redirect to the "User" CRUD index page
-        $url = $routeBuilder->setController(AuthorCrudController::class)
+        $url = $routeBuilder->setController(BookCrudController::class)
             ->setAction('index')
             ->generateUrl();
 
