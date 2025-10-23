@@ -28,3 +28,6 @@ build:
 
 generate-test-data:
 	docker exec -ti $(PHP_CONTAINER) php -d memory_limit=1G bin/console app:generate-test-data
+
+generate-admin:
+	docker exec -ti $(PHP_CONTAINER) php bin/console app:generate-admin
